@@ -1,0 +1,5 @@
+# scratch 目录里的所有内容默认不进 git
+# 正式版迁到 store 后,本地 scratch 文件可以删除
+*
+!.gitignore
+!README.md
