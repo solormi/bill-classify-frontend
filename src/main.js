@@ -4,6 +4,7 @@ import App from './App.vue'
 import { router } from './router'
 import { useMock } from './api/client'
 import { setupMock } from './api/mock'
+import './styles/tokens.css'
 
 if (useMock) setupMock()
 

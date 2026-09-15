@@ -18,16 +18,38 @@
 </script>
 
 <style>
-.app { font-family: system-ui, -apple-system, "PingFang SC", sans-serif; }
-.topbar { display: flex; gap: 24px; align-items: center; padding: 12px 24px; border-bottom: 1px solid #eee; }
-.topbar h1 { font-size: 18px; margin: 0; }
-.topbar nav a { margin-right: 12px; color: #2c3e50; text-decoration: none; }
-.topbar nav a.router-link-active { color: #42b883; font-weight: 600; }
-main { padding: 16px 24px; }
-table { border-collapse: collapse; width: 100%; }
-th, td { padding: 6px 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
-th { background: #fafafa; }
-button { padding: 4px 10px; cursor: pointer; }
-.error { color: #d03050; padding: 8px 0; }
-.muted { color: #888; }
+.app {
+  font-family: system-ui, -apple-system, "PingFang SC", sans-serif;
+  color: var(--c-text);
+}
+.topbar {
+  display: flex;
+  gap: var(--sp-6);
+  align-items: center;
+  padding: var(--sp-3) var(--sp-6);
+  border-bottom: 1px solid var(--c-border);
+}
+.topbar h1 {
+  font-size: var(--fs-lg);
+  margin: 0;
+}
+.topbar nav a {
+  margin-right: var(--sp-3);
+  color: var(--c-text);
+  text-decoration: none;
+}
+.topbar nav a.router-link-active {
+  color: var(--c-accent);
+  font-weight: 600;
+}
+main {
+  padding: var(--sp-4) var(--sp-6);
+}
+.error {
+  color: var(--c-error);
+  padding: var(--sp-2) 0;
+}
+.muted {
+  color: var(--c-muted);
+}
 </style>
