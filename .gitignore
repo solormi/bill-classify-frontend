@@ -21,3 +21,7 @@ Thumbs.db
 *.swp
 *.swo
 *.log
+
+# Claude / harness local state (worktrees, superpowers, skill artifacts)
+.claude/
+.superpowers/
