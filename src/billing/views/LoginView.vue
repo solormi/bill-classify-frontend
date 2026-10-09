@@ -52,7 +52,7 @@ async function onSubmit() {
       </button>
     </form>
     <p class="alt">
-      没有账号?<router-link to="/register">注册</router-link>
+      没有账号?<router-link to="register">注册</router-link>
     </p>
   </main>
 </template>

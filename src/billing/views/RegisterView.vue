@@ -66,7 +66,7 @@ async function onSubmit() {
       </button>
     </form>
     <p class="alt">
-      已有账号?<router-link to="/login">登录</router-link>
+      已有账号?<router-link to="login">登录</router-link>
     </p>
   </main>
 </template>
