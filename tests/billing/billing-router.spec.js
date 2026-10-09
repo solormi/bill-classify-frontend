@@ -32,9 +32,14 @@ describe('总路由', () => {
     expect(resolved.path).toBe('/billing')
   })
 
-  it('billing 子路由配置只含一个空路径条目', () => {
-    expect(billingRoutes).toHaveLength(1)
+  it('billing 子路由配置现在含 placeholder + login + register', () => {
+    // Change 2 (add-billing-user) added /login and /register alongside the
+    // placeholder. Empty-path entry must remain the protected index view.
+    expect(billingRoutes).toHaveLength(3)
     expect(billingRoutes[0].path).toBe('')
+    expect(billingRoutes[0].meta?.requireAuth).toBe(true)
+    expect(billingRoutes[1].path).toBe('login')
+    expect(billingRoutes[2].path).toBe('register')
   })
 
   it('未知路由不崩溃,但也不匹配任何记录(当前行为)', async () => {

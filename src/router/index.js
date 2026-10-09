@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import billingRoutes from '@/billing/router'
+import { installAuthGuard } from '@/shared/guards'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,5 +12,7 @@ const router = createRouter({
     },
   ],
 })
+
+installAuthGuard(router)
 
 export default router
