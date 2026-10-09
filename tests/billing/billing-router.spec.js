@@ -32,10 +32,12 @@ describe('总路由', () => {
     expect(resolved.path).toBe('/billing')
   })
 
-  it('billing 子路由配置现在含 placeholder + login + register + categories + rules', () => {
-    // Change 3 (add-billing-category-rule) added /categories and /rules.
-    // Empty-path entry remains the protected index view.
-    expect(billingRoutes).toHaveLength(5)
+  it('billing 子路由配置含 placeholder + login + register + categories + rules + bills 系', () => {
+    // Change 4 (add-billing-bill-core) appends 5 /bills/* routes after the
+    // change-3 routes. Total expected length: 5 (placeholder/login/register/
+    // categories/rules) + 5 (bills, bills/new, bills/recycle, bills/:id,
+    // bills/:id/edit) = 10.
+    expect(billingRoutes).toHaveLength(10)
     expect(billingRoutes[0].path).toBe('')
     expect(billingRoutes[0].meta?.requireAuth).toBe(true)
     expect(billingRoutes[1].path).toBe('login')
@@ -44,6 +46,15 @@ describe('总路由', () => {
     expect(billingRoutes[3].meta?.requireAuth).toBe(true)
     expect(billingRoutes[4].path).toBe('rules')
     expect(billingRoutes[4].meta?.requireAuth).toBe(true)
+    // change 4: bills routes appended after change 3 routes
+    expect(billingRoutes[5].path).toBe('bills')
+    expect(billingRoutes[6].path).toBe('bills/new')
+    expect(billingRoutes[7].path).toBe('bills/recycle')
+    expect(billingRoutes[8].path).toBe('bills/:id')
+    expect(billingRoutes[9].path).toBe('bills/:id/edit')
+    for (let i = 5; i < 10; i++) {
+      expect(billingRoutes[i].meta?.requireAuth).toBe(true)
+    }
   })
 
   it('未知路由不崩溃,但也不匹配任何记录(当前行为)', async () => {

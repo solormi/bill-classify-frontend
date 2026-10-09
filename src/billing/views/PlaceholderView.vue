@@ -3,6 +3,7 @@
     <h1>记账 MVP</h1>
     <p>当前 change: <code>initialize-billing-project</code></p>
     <nav class="links">
+      <router-link to="/billing/bills">账单</router-link>
       <router-link to="/billing/categories">分类管理</router-link>
       <router-link to="/billing/rules">自动分类规则</router-link>
     </nav>
