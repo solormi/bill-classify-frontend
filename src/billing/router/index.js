@@ -1,7 +1,9 @@
 // src/billing/router/index.js
-// Sub-routes mounted under /billing. /login and /register are public; the
-// placeholder index view (path:'') carries meta.requireAuth so the guard
-// kicks in once auth lands.
+// Sub-routes mounted under /billing.
+// - '' placeholder (requireAuth)
+// - /login + /register (public, from change 2)
+// - /categories (requireAuth, change 3)
+// - /rules (requireAuth, change 3)
 export default [
   {
     path: '',
@@ -15,5 +17,15 @@ export default [
   {
     path: 'register',
     component: () => import('../views/RegisterView.vue'),
+  },
+  {
+    path: 'categories',
+    component: () => import('../views/CategoryManageView.vue'),
+    meta: { requireAuth: true },
+  },
+  {
+    path: 'rules',
+    component: () => import('../views/RuleManageView.vue'),
+    meta: { requireAuth: true },
   },
 ]
