@@ -16,6 +16,18 @@ const emailValid = computed(() => /.+@.+\..+/.test(email.value))
 const passwordValid = computed(() => password.value.length >= 8)
 const formValid = computed(() => emailValid.value && passwordValid.value)
 
+// Vue v-model only listens to `input` events. Browser autofill / password
+// managers (1Password, Bitwarden, Keychain) often populate the visible field
+// but fire only `change` (not `input`) — leaving v-model's ref empty and
+// the submit button stuck disabled. Belt-and-brace @change handler catches
+// those cases. Manual typing still updates via v-model immediately.
+function onEmailChange(e) {
+  email.value = e.target.value
+}
+function onPasswordChange(e) {
+  password.value = e.target.value
+}
+
 async function onSubmit() {
   if (!formValid.value || submitting.value) return
   submitting.value = true
@@ -40,11 +52,24 @@ async function onSubmit() {
     <form @submit.prevent="onSubmit">
       <label>
         邮箱
-        <input v-model="email" type="email" autocomplete="email" required />
+          <input
+            v-model="email"
+            type="email"
+            autocomplete="email"
+            required
+            @change="onEmailChange"
+          />
       </label>
       <label>
         密码
-        <input v-model="password" type="password" autocomplete="current-password" required minlength="8" />
+        <input
+          v-model="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          minlength="8"
+          @change="onPasswordChange"
+        />
       </label>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       <button type="submit" :disabled="!formValid || submitting">

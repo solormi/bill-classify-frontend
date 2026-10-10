@@ -18,6 +18,16 @@ const passwordValid = computed(() => password.value.length >= 8 && /[A-Za-z]/.te
 const confirmValid = computed(() => confirm.value === password.value)
 const formValid = computed(() => emailValid.value && passwordValid.value && confirmValid.value)
 
+// Vue v-model only listens to `input` events. Browser autofill / password
+// managers populate the visible field but fire only `change` — leaving
+// v-model's ref empty and the submit button stuck disabled. Belt-and-brace
+// @change handler catches those cases. Manual typing still updates via
+// v-model immediately.
+function onEmailChange(e) { email.value = e.target.value }
+function onPasswordChange(e) { password.value = e.target.value }
+function onConfirmChange(e) { confirm.value = e.target.value }
+function onNicknameChange(e) { nickname.value = e.target.value }
+
 async function onSubmit() {
   if (!formValid.value || submitting.value) return
   submitting.value = true
@@ -46,19 +56,19 @@ async function onSubmit() {
     <form @submit.prevent="onSubmit">
       <label>
         邮箱
-        <input v-model="email" type="email" autocomplete="email" required />
+          <input v-model="email" type="email" autocomplete="email" required @change="onEmailChange" />
       </label>
       <label>
         密码(≥8 位,含字母和数字)
-        <input v-model="password" type="password" autocomplete="new-password" required />
+          <input v-model="password" type="password" autocomplete="new-password" required @change="onPasswordChange" />
       </label>
       <label>
         确认密码
-        <input v-model="confirm" type="password" autocomplete="new-password" required />
+          <input v-model="confirm" type="password" autocomplete="new-password" required @change="onConfirmChange" />
       </label>
       <label>
         昵称(可选)
-        <input v-model="nickname" type="text" maxlength="50" />
+          <input v-model="nickname" type="text" maxlength="50" @change="onNicknameChange" />
       </label>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       <button type="submit" :disabled="!formValid || submitting">
