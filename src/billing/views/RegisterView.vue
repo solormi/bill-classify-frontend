@@ -10,6 +10,8 @@ const email = ref('')
 const password = ref('')
 const confirm = ref('')
 const nickname = ref('')
+const showPassword = ref(false)
+const showConfirm = ref(false)
 const errorMessage = ref('')
 const submitting = ref(false)
 
@@ -65,13 +67,35 @@ async function onSubmit() {
 
         <div class="field">
           <label for="reg-pw">密码</label>
-          <input id="reg-pw" v-model="password" type="password" autocomplete="new-password" placeholder="至少 8 位,含字母和数字" required @change="onPasswordChange" />
+          <div class="password-field">
+            <input id="reg-pw" v-model="password" :type="showPassword ? 'text' : 'password'" autocomplete="new-password" placeholder="至少 8 位,含字母和数字" required @change="onPasswordChange" />
+            <button type="button" class="password-toggle" :aria-label="showPassword ? '隐藏密码' : '显示密码'" :aria-pressed="showPassword" @click="showPassword = !showPassword">
+              <svg v-if="showPassword" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.1A10.7 10.7 0 0 1 12 5c5.4 0 9.3 4.5 10.5 6.6a13 13 0 0 1-2.4 3M6.6 6.6C4.1 8.3 2.5 10.7 1.5 11.6 2.7 13.7 6.6 18.2 12 18.2c1.5 0 2.9-.3 4.1-.8" />
+              </svg>
+              <svg v-else viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M1.5 11.6C2.7 9.5 6.6 5 12 5s9.3 4.5 10.5 6.6C21.3 13.7 17.4 18.2 12 18.2S2.7 13.7 1.5 11.6z" />
+                <circle cx="12" cy="11.6" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+            </button>
+          </div>
           <p class="hint">用于登录。强度:≥8 位 + 字母 + 数字</p>
         </div>
 
         <div class="field">
           <label for="reg-confirm">确认密码</label>
-          <input id="reg-confirm" v-model="confirm" type="password" autocomplete="new-password" required @change="onConfirmChange" />
+          <div class="password-field">
+            <input id="reg-confirm" v-model="confirm" :type="showConfirm ? 'text' : 'password'" autocomplete="new-password" required @change="onConfirmChange" />
+            <button type="button" class="password-toggle" :aria-label="showConfirm ? '隐藏密码' : '显示密码'" :aria-pressed="showConfirm" @click="showConfirm = !showConfirm">
+              <svg v-if="showConfirm" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.1A10.7 10.7 0 0 1 12 5c5.4 0 9.3 4.5 10.5 6.6a13 13 0 0 1-2.4 3M6.6 6.6C4.1 8.3 2.5 10.7 1.5 11.6 2.7 13.7 6.6 18.2 12 18.2c1.5 0 2.9-.3 4.1-.8" />
+              </svg>
+              <svg v-else viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M1.5 11.6C2.7 9.5 6.6 5 12 5s9.3 4.5 10.5 6.6C21.3 13.7 17.4 18.2 12 18.2S2.7 13.7 1.5 11.6z" />
+                <circle cx="12" cy="11.6" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div class="field">
@@ -92,3 +116,40 @@ async function onSubmit() {
     </div>
   </main>
 </template>
+
+<style scoped>
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-field input {
+  width: 100%;
+  padding-right: 44px;
+}
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: var(--color-primary);
+  background-color: var(--color-surface-hover);
+  outline: none;
+}
+.password-toggle[aria-pressed="true"] {
+  color: var(--color-primary);
+}
+</style>
