@@ -1,7 +1,4 @@
 <script setup>
-// BillCreateView — entry point for the "记一笔" flow. Defers form
-// behavior to BillForm (create mode) and pushes to the detail page
-// after a successful create.
 import { useRouter } from 'vue-router'
 import BillForm from '@/billing/components/BillForm.vue'
 import { useBillStore } from '@/billing/stores/bill'
@@ -20,12 +17,16 @@ async function onSubmit(payload) {
 </script>
 
 <template>
-  <main class="create-view">
-    <h1>记一笔</h1>
-    <BillForm mode="create" @submit="onSubmit" />
+  <main class="page page-narrow">
+    <div class="page-header">
+      <div>
+        <h1>记一笔</h1>
+        <p>输入金额、商户和分类。系统会按你设定的规则自动归类。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <BillForm mode="create" @submit="onSubmit" />
+    </div>
   </main>
 </template>
-
-<style scoped>
-.create-view { max-width: 480px; margin: 2rem auto; }
-</style>

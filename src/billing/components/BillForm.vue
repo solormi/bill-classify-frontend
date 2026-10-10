@@ -1,11 +1,8 @@
 <script setup>
-// BillForm — shared single-bill entry/edit form. Lives in change 4,
-// reuses change 3's CategorySelect and ruleStore.preview to surface
-// auto-classification hints live as the user types.
-//
-// SaveRuleDialog is ONLY opened when the user manually picks a category
-// that differs from the auto-suggested one (so the very first auto-fill
-// does NOT trigger the dialog).
+// BillForm — shared by /billing/bills/new (create) and /billing/bills/:id/edit.
+// Live-preview auto-classification with 300ms debounce. Manually overriding
+// the auto-suggested category opens SaveRuleDialog so the user can persist
+// the override as a new rule.
 import { ref, computed, watch, onMounted } from 'vue'
 import AmountInput from './AmountInput.vue'
 import DatePicker from './DatePicker.vue'
@@ -15,8 +12,8 @@ import { useCategoryStore } from '@/billing/stores/category'
 import { useRuleStore } from '@/billing/stores/rule'
 
 const props = defineProps({
-  mode: { type: String, default: 'create' }, // 'create' | 'edit'
-  initial: { type: Object, default: null },  // bill for edit mode
+  mode: { type: String, default: 'create' },
+  initial: { type: Object, default: null },
 })
 const emit = defineEmits(['submit'])
 
@@ -29,10 +26,9 @@ const merchant = ref(props.initial?.merchant ?? '')
 const note = ref(props.initial?.note ?? '')
 const billDate = ref(props.initial?.bill_date ?? new Date().toISOString().slice(0, 10))
 const categoryId = ref(props.initial?.category_id ?? null)
-const autoCategoryId = ref(null) // 从 preview 拿到的分类 id
+const autoCategoryId = ref(null)
 const autoMatched = ref(false)
 
-// SaveRuleDialog state
 const dialogOpen = ref(false)
 const dialogPayload = ref(null)
 
@@ -40,7 +36,6 @@ const canSubmit = computed(() => {
   return amount.value !== '' && Number(amount.value) > 0 && billDate.value && categoryId.value
 })
 
-// Debounced preview call when merchant/note/amount change
 let previewTimer = null
 async function runPreview() {
   if (!merchant.value && !note.value) {
@@ -56,26 +51,22 @@ async function runPreview() {
     })
     autoCategoryId.value = result.category_id
     autoMatched.value = result.category_id != null
-    // Auto-fill CategorySelect only if user hasn't manually chosen yet
     if (!categoryId.value || categoryId.value === autoCategoryId.value) {
       categoryId.value = result.category_id
     }
-  } catch {
-    // preview is best-effort; ignore errors
-  }
+  } catch { /* preview is best-effort */ }
 }
 watch([merchant, note, amount], () => {
   clearTimeout(previewTimer)
-  previewTimer = setTimeout(runPreview, 300) // debounce 300ms
+  previewTimer = setTimeout(runPreview, 300)
 })
 
 function onCategoryChange(newVal) {
-  // If user manually picked a different category from auto-suggested, open dialog.
   if (
     autoMatched.value &&
     autoCategoryId.value &&
     newVal !== autoCategoryId.value &&
-    merchant.value  // only meaningful when merchant is filled
+    merchant.value
   ) {
     dialogPayload.value = {
       merchant: merchant.value,
@@ -117,38 +108,33 @@ function onSubmit() {
 
 <template>
   <form class="bill-form" @submit.prevent="onSubmit">
-    <label>
-      金额
+    <div class="field">
+      <label>金额</label>
       <AmountInput v-model="amount" />
-    </label>
+    </div>
 
-    <label>
-      商户
+    <div class="field">
+      <label>商户</label>
       <input v-model="merchant" type="text" maxlength="100" placeholder="星巴克" />
-    </label>
+    </div>
 
-    <label>
-      备注
-      <textarea v-model="note" rows="2" maxlength="500" />
-    </label>
+    <div class="field">
+      <label>备注</label>
+      <textarea v-model="note" rows="2" maxlength="500" placeholder="(可选)"></textarea>
+    </div>
 
-    <label>
-      日期
+    <div class="field">
+      <label>日期</label>
       <DatePicker v-model="billDate" />
-    </label>
+    </div>
 
-    <label>
-      分类
-      <CategorySelect
-        :value="categoryId"
-        @update:value="onCategoryChange"
-      />
-      <span v-if="autoMatched" class="auto-hint">
-        ✓ 自动识别(可手动调整)
-      </span>
-    </label>
+    <div class="field">
+      <label>分类</label>
+      <CategorySelect :value="categoryId" @update:value="onCategoryChange" />
+      <span v-if="autoMatched" class="auto-hint">自动识别,可手动调整</span>
+    </div>
 
-    <button type="submit" :disabled="!canSubmit">
+    <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="!canSubmit">
       {{ mode === 'edit' ? '保存' : '保存账单' }}
     </button>
 
@@ -163,9 +149,7 @@ function onSubmit() {
 </template>
 
 <style scoped>
-.bill-form { display: flex; flex-direction: column; gap: 1rem; max-width: 480px; }
-.bill-form label { display: flex; flex-direction: column; gap: 0.25rem; }
-.bill-form input, .bill-form textarea, .bill-form select { padding: 0.5rem; }
-.bill-form button { padding: 0.75rem; font-weight: 600; }
-.auto-hint { color: #888; font-size: 0.85rem; margin-top: 0.25rem; }
+.bill-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field label { font-size: var(--text-sm); color: var(--color-text-soft); font-weight: 500; }
 </style>

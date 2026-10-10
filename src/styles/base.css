@@ -1,0 +1,156 @@
+/* Global resets + typography + page-level chrome.
+ * Loaded once in App.vue. */
+
+* { box-sizing: border-box; }
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.06), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.06), transparent 40%),
+    var(--color-bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text);
+  line-height: 1.25;
+  font-weight: 600;
+}
+h1 { font-size: var(--text-3xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--text-2xl); letter-spacing: -0.01em; }
+h3 { font-size: var(--text-xl); }
+
+p { margin: 0 0 var(--space-3); color: var(--color-text-soft); }
+
+a {
+  color: var(--color-brand);
+  text-decoration: none;
+}
+a:hover { color: var(--color-brand-strong); text-decoration: underline; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-surface-alt);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+/* Page layout helpers (used by individual views). */
+.page {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+.page-wide { max-width: var(--container-wide); }
+.page-narrow { max-width: var(--container-narrow); }
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+.page-header h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.page-header p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.page-header .actions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+/* Auth pages (login / register) — centered card on the gradient bg. */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5) var(--space-4);
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-7) var(--space-6) var(--space-6);
+}
+.auth-card .brand {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+.auth-card .brand-mark {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+  color: white;
+  font-weight: 700;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+.auth-card h1 {
+  text-align: center;
+  font-size: var(--text-xl);
+  margin: 0;
+}
+.auth-card form { display: flex; flex-direction: column; gap: var(--space-3); }
+.auth-card .field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.auth-card .field label {
+  font-size: var(--text-sm);
+  color: var(--color-text-soft);
+  font-weight: 500;
+}
+.auth-card .error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  background: var(--color-danger-soft);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+.auth-card .alt {
+  text-align: center;
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: var(--space-7) var(--space-4);
+  color: var(--color-text-muted);
+}
+.empty h3 { color: var(--color-text-soft); }

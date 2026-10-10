@@ -1,7 +1,4 @@
 <script setup>
-// BillDetailView — read-only detail with edit / delete actions. Uses
-// billApi.get for the initial fetch (no need to pull the whole list
-// when deep-linked from a notification or share link).
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBillStore } from '@/billing/stores/bill'
@@ -43,32 +40,50 @@ async function onDelete() {
 </script>
 
 <template>
-  <main class="detail-view">
-    <p v-if="error" class="error">{{ error }}</p>
+  <main class="page page-narrow">
+    <p v-if="error" class="error" style="background: var(--color-danger-soft); color: var(--color-danger); padding: var(--space-3); border-radius: var(--radius);">{{ error }}</p>
+
     <div v-if="bill">
-      <h1>账单详情</h1>
-      <dl>
-        <dt>金额</dt><dd>{{ bill.amount.toFixed(2) }}</dd>
-        <dt>商户</dt><dd>{{ bill.merchant || '—' }}</dd>
-        <dt>备注</dt><dd>{{ bill.note || '—' }}</dd>
-        <dt>日期</dt><dd>{{ bill.bill_date }}</dd>
-        <dt>分类</dt><dd>{{ categoryLabel(bill.category_id) }}</dd>
-        <dt>来源</dt><dd>{{ bill.source }}</dd>
-        <dt>创建时间</dt><dd>{{ bill.created_at }}</dd>
-      </dl>
-      <div class="actions">
-        <router-link :to="`/billing/bills/${bill.id}/edit`">编辑</router-link>
-        <button @click="onDelete">删除</button>
-        <router-link to="/billing/bills">返回列表</router-link>
+      <div class="page-header">
+        <div>
+          <h1>账单详情</h1>
+          <p>创建于 {{ bill.created_at }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <dl style="display: grid; grid-template-columns: 120px 1fr; gap: var(--space-3) var(--space-4); margin: 0;">
+          <dt style="color: var(--color-text-muted);">金额</dt>
+          <dd style="margin: 0; font-size: var(--text-xl); font-weight: 600; color: var(--color-brand);">
+            {{ Number(bill.amount).toFixed(2) }}
+          </dd>
+
+          <dt style="color: var(--color-text-muted);">分类</dt>
+          <dd style="margin: 0;">
+            <span class="badge badge-brand">{{ categoryLabel(bill.category_id) }}</span>
+          </dd>
+
+          <dt style="color: var(--color-text-muted);">商户</dt>
+          <dd style="margin: 0;">{{ bill.merchant || '—' }}</dd>
+
+          <dt style="color: var(--color-text-muted);">备注</dt>
+          <dd style="margin: 0; color: var(--color-text-soft);">{{ bill.note || '—' }}</dd>
+
+          <dt style="color: var(--color-text-muted);">日期</dt>
+          <dd style="margin: 0;">{{ bill.bill_date }}</dd>
+
+          <dt style="color: var(--color-text-muted);">来源</dt>
+          <dd style="margin: 0;">
+            <span class="badge badge-muted">{{ bill.source }}</span>
+          </dd>
+        </dl>
+      </div>
+
+      <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4);">
+        <router-link :to="`/billing/bills/${bill.id}/edit`" class="btn btn-primary">编辑</router-link>
+        <button class="btn btn-danger" @click="onDelete">删除</button>
+        <router-link to="/billing/bills" class="btn btn-ghost">返回列表</router-link>
       </div>
     </div>
   </main>
 </template>
-
-<style scoped>
-.detail-view { max-width: 600px; margin: 2rem auto; }
-dl { display: grid; grid-template-columns: 100px 1fr; gap: 0.5rem; }
-dt { color: #888; }
-.actions { margin-top: 1rem; display: flex; gap: 1rem; }
-.error { color: #d33; }
-</style>

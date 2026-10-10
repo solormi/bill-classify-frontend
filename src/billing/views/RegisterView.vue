@@ -18,11 +18,7 @@ const passwordValid = computed(() => password.value.length >= 8 && /[A-Za-z]/.te
 const confirmValid = computed(() => confirm.value === password.value)
 const formValid = computed(() => emailValid.value && passwordValid.value && confirmValid.value)
 
-// Vue v-model only listens to `input` events. Browser autofill / password
-// managers populate the visible field but fire only `change` — leaving
-// v-model's ref empty and the submit button stuck disabled. Belt-and-brace
-// @change handler catches those cases. Manual typing still updates via
-// v-model immediately.
+// Belt-and-brace @change handlers for autofill defense.
 function onEmailChange(e) { email.value = e.target.value }
 function onPasswordChange(e) { password.value = e.target.value }
 function onConfirmChange(e) { confirm.value = e.target.value }
@@ -51,41 +47,48 @@ async function onSubmit() {
 </script>
 
 <template>
-  <main class="register-view">
-    <h1>注册</h1>
-    <form @submit.prevent="onSubmit">
-      <label>
-        邮箱
-          <input v-model="email" type="email" autocomplete="email" required @change="onEmailChange" />
-      </label>
-      <label>
-        密码(≥8 位,含字母和数字)
-          <input v-model="password" type="password" autocomplete="new-password" required @change="onPasswordChange" />
-      </label>
-      <label>
-        确认密码
-          <input v-model="confirm" type="password" autocomplete="new-password" required @change="onConfirmChange" />
-      </label>
-      <label>
-        昵称(可选)
-          <input v-model="nickname" type="text" maxlength="50" @change="onNicknameChange" />
-      </label>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <button type="submit" :disabled="!formValid || submitting">
-        {{ submitting ? '注册中...' : '注册' }}
-      </button>
-    </form>
-    <p class="alt">
-      已有账号?<router-link to="login">登录</router-link>
-    </p>
+  <main class="auth-page">
+    <div class="auth-card">
+      <div class="brand">
+        <div class="brand-mark">¥</div>
+        <h1>注册</h1>
+        <p style="margin: 4px 0 0; color: var(--color-text-muted); font-size: var(--text-sm);">
+          创建你的第一个账号(自动获得 admin 权限)
+        </p>
+      </div>
+
+      <form @submit.prevent="onSubmit">
+        <div class="field">
+          <label for="reg-id">邮箱</label>
+          <input id="reg-id" v-model="email" type="text" autocomplete="username" placeholder="user@example.com" required @change="onEmailChange" />
+        </div>
+
+        <div class="field">
+          <label for="reg-pw">密码</label>
+          <input id="reg-pw" v-model="password" type="password" autocomplete="new-password" placeholder="至少 8 位,含字母和数字" required @change="onPasswordChange" />
+          <p class="hint">用于登录。强度:≥8 位 + 字母 + 数字</p>
+        </div>
+
+        <div class="field">
+          <label for="reg-confirm">确认密码</label>
+          <input id="reg-confirm" v-model="confirm" type="password" autocomplete="new-password" required @change="onConfirmChange" />
+        </div>
+
+        <div class="field">
+          <label for="reg-nick">昵称(可选)</label>
+          <input id="reg-nick" v-model="nickname" type="text" placeholder="留空则自动从邮箱生成" maxlength="50" @change="onNicknameChange" />
+        </div>
+
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" :disabled="!formValid || submitting">
+          {{ submitting ? '注册中...' : '注册' }}
+        </button>
+      </form>
+
+      <p class="alt">
+        已有账号?<router-link to="login">直接登录</router-link>
+      </p>
+    </div>
   </main>
 </template>
-
-<style scoped>
-.register-view { max-width: 360px; margin: 4rem auto; padding: 2rem; }
-form label { display: block; margin-bottom: 1rem; }
-input { width: 100%; padding: 0.5rem; margin-top: 0.25rem; }
-button { padding: 0.5rem 1rem; }
-.error { color: var(--color-error, #d33); }
-.alt { margin-top: 1rem; font-size: 0.9rem; }
-</style>

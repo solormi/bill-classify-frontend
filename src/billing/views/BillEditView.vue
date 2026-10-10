@@ -1,6 +1,4 @@
 <script setup>
-// BillEditView — pre-fills BillForm in edit mode with the existing
-// bill. Update via the store, then bounce back to the detail page.
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BillForm from '@/billing/components/BillForm.vue'
@@ -34,13 +32,20 @@ async function onSubmit(payload) {
 </script>
 
 <template>
-  <main class="edit-view">
-    <p v-if="error" class="error">{{ error }}</p>
-    <BillForm v-if="bill" mode="edit" :initial="bill" @submit="onSubmit" />
+  <main class="page page-narrow">
+    <p v-if="error" class="error" style="background: var(--color-danger-soft); color: var(--color-danger); padding: var(--space-3); border-radius: var(--radius);">{{ error }}</p>
+
+    <div v-if="bill">
+      <div class="page-header">
+        <div>
+          <h1>编辑账单</h1>
+          <p>修改后保存。改了分类会问要不要存为规则。</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <BillForm mode="edit" :initial="bill" @submit="onSubmit" />
+      </div>
+    </div>
   </main>
 </template>
-
-<style scoped>
-.edit-view { max-width: 480px; margin: 2rem auto; }
-.error { color: #d33; }
-</style>

@@ -1,0 +1,74 @@
+/* Design tokens — referenced by every view via :root variables.
+ * No preprocessor needed; plain CSS variables work in Vue 3 scoped styles
+ * (variables are inherited from the root scope). */
+
+:root {
+  /* Brand */
+  --color-brand: #2563eb;          /* primary blue */
+  --color-brand-strong: #1d4ed8;
+  --color-brand-soft: #dbeafe;
+  --color-accent: #f59e0b;           /* warm amber for finance */
+  --color-accent-soft: #fef3c7;
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-success-soft: #d1fae5;
+  --color-warn: #f59e0b;
+  --color-warn-soft: #fef3c7;
+  --color-danger: #ef4444;
+  --color-danger-soft: #fee2e2;
+
+  /* Surface */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  /* Text */
+  --color-text: #0f172a;
+  --color-text-soft: #475569;
+  --color-text-muted: #94a3b8;
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+                'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
+                Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10), 0 2px 4px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.16), 0 4px 8px rgba(15, 23, 42, 0.08);
+
+  /* Layout */
+  --nav-height: 56px;
+  --container-narrow: 420px;
+  --container: 720px;
+  --container-wide: 960px;
+}
