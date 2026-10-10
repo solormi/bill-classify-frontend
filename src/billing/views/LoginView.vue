@@ -12,9 +12,18 @@ const password = ref('')
 const errorMessage = ref('')
 const submitting = ref(false)
 
-const emailValid = computed(() => /.+@.+\..+/.test(email.value))
+// Identifier accepts either an email OR a nickname. Both go through the
+// same backend lookup chain (FindByEmail → FindByNickname fallback).
+// Validate format: either looks like email OR is a 3+ char non-empty string
+// (nicknames are arbitrary identifiers the server accepts).
+const identifierValid = computed(() => {
+  const v = email.value.trim()
+  if (!v) return false
+  if (/.+@.+\..+/.test(v)) return true
+  return v.length >= 3
+})
 const passwordValid = computed(() => password.value.length >= 8)
-const formValid = computed(() => emailValid.value && passwordValid.value)
+const formValid = computed(() => identifierValid.value && passwordValid.value)
 
 // Vue v-model only listens to `input` events. Browser autofill / password
 // managers (1Password, Bitwarden, Keychain) often populate the visible field
@@ -51,11 +60,11 @@ async function onSubmit() {
     <h1>登录</h1>
     <form @submit.prevent="onSubmit">
       <label>
-        邮箱
+        邮箱 / 用户名
           <input
             v-model="email"
-            type="email"
-            autocomplete="email"
+            type="text"
+            autocomplete="username"
             required
             @change="onEmailChange"
           />
